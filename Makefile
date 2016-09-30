@@ -2,9 +2,13 @@ BUILD_LIB_DIR := "build"
 
 all: test
 
-test: build
+venv:
+	virtualenv venv --python=python2.6
+	venv/bin/pip install testify
+
+test: build venv
 	@echo "Testing..."
-	PYTHONPATH=${BUILD_LIB_DIR} testify -v --summary tests
+	PYTHONPATH=${BUILD_LIB_DIR} venv/bin/testify -v --summary tests
 
 tests: test
 
@@ -17,4 +21,4 @@ ${BUILD_LIB_DIR}/catbox.so:
 .PHONY=clean
 clean:
 	python setup.py clean --all --build-lib=${BUILD_LIB_DIR}
-
+	rm -rf venv
